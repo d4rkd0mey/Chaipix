@@ -188,12 +188,12 @@ async def test_ai_connection():
             "fix": "Check your OPENAI_API_KEY in .env file"
         }
 
-
 if __name__ == "__main__":
+    PORT = int(os.getenv("PORT", 8000))
     print("🚀 Starting PhotoAI with AI Enhancement...")
-    print("🏠 Homepage: http://localhost:8000")
-    print("🤖 AI Upload: http://localhost:8000/upload")
-    print("🧪 Test AI: http://localhost:8000/test-ai")
-    print("📚 API Docs: http://localhost:8000/docs")
+    print(f"🏠 Homepage: http://localhost:{PORT}")
+    print(f"🤖 AI Upload: http://localhost:{PORT}/upload")
+    print(f"🧪 Test AI: http://localhost:{PORT}/test-ai")
+    print(f"📚 API Docs: http://localhost:{PORT}/docs")
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT, reload=True)

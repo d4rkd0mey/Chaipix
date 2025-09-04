@@ -1,0 +1,9 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+openai==1.51.0
+httpx==0.25.2
+httpcore==1.0.2
+python-dotenv==1.0.0
+aiofiles==23.2.1
+python-multipart==0.0.6
+jinja2==3.1.2
