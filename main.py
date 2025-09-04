@@ -4,16 +4,32 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import os
+from pathlib import Path
 import uuid
 import aiofiles
 from ai_service import photo_ai  # Import our AI brain!
+
+import os
+from pathlib import Path
+
+# Add this right after your imports, before creating the app
+print(f"Current working directory: {os.getcwd()}")
+print(f"Templates directory exists: {Path('templates').exists()}")
+if Path('templates').exists():
+    template_files = list(Path('templates').glob('*.html'))
+    print(f"HTML files in templates: {template_files}")
 
 # Create your app
 app = FastAPI(title="PhotoAI - AI-Powered Food Enhancement")
 
 # Add support for HTML pages and static files
-app.mount("/static", StaticFiles(directory="../static"), name="static")
-templates = Jinja2Templates(directory="../templates")
+static_path = Path("static")
+if static_path.exists():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
+else:
+    print("Warning: static directory not found")
+
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
