@@ -173,13 +173,13 @@ Keep under 200 characters."""
             "enhancement_prompt": enhancement_prompt,
             "enhanced_image_url": enhancement_result["enhanced_image_url"],
             "processing_steps": [
-                "✅ Photo analyzed with GPT-4 Vision",
+                "✅ Photo analyzed with photo analyzer",
                 "✅ Food item identified: " + food_item.title(),
                 "✅ Enhancement strategy generated",
-                "✅ Professional photo created with DALL-E 3",
+                "✅ Professional photo created with Transformer LLM",
                 "✅ Ready for download!"
             ],
-            "ai_cost": "$0.05",
+            "ai_cost": "$0.08",
             "processing_time": "30 seconds"
         }
 
