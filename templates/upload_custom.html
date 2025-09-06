@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom AI Enhancement - PhotoAI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #1e293b; font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { color: #64748b; font-size: 1.1rem; }
+
+        .upload-form { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+        .upload-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover { border-color: #3b82f6; background: #eff6ff; }
+        .upload-zone.dragover { border-color: #3b82f6; background: #dbeafe; }
+
+        .file-input { display: none; }
+        .upload-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .customization-panel { margin-top: 30px; }
+        .panel-title { font-size: 1.3rem; color: #1e293b; margin-bottom: 20px; }
+
+        .controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .control-group { }
+        .control-label { display: block; font-weight: 500; color: #374151; margin-bottom: 8px; }
+        .control-select, .control-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .control-checkbox { margin-right: 8px; }
+
+        .cuisine-info {
+            background: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: #0c4a6e;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 30px;
+        }
+        .submit-btn:hover { background: linear-gradient(135deg, #059669, #047857); }
+
+        .back-link { display: inline-block; margin-bottom: 20px; color: #3b82f6; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+
+        .preview-image { max-width: 300px; margin: 20px auto; display: none; }
+        .preview-image img { width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="header">
+            <h1>Custom AI Enhancement</h1>
+            <p>Upload your food photo and customize the styling approach for perfect results</p>
+        </div>
+
+        <form class="upload-form" action="/upload_custom" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-zone" id="uploadZone">
+                <div id="uploadText">
+                    <h3>Choose your food photo</h3>
+                    <p>Drag & drop or click to select</p>
+                    <button type="button" class="upload-btn">
+                        Select Photo
+                    </button>
+
+                </div>
+                <div class="preview-image" id="previewContainer">
+                    <img id="previewImage" src="" alt="Preview">
+                </div>
+                <input type="file" id="fileInput" name="file" class="file-input" accept="image/*" required>
+            </div>
+
+            <div class="cuisine-info">
+                <strong>Smart Styling:</strong> Our AI will automatically detect if your dish is Southeast Asian or Western cuisine and apply the appropriate styling approach. You can fine-tune the details below.
+            </div>
+
+            <div class="customization-panel">
+                <h2 class="panel-title">Customization Options</h2>
+
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label class="control-label" for="lighting">Lighting Style</label>
+                        <select name="lighting" id="lighting" class="control-select">
+                            <option value="natural">Natural Window Light</option>
+                            <option value="studio">Studio Lighting</option>
+                            <option value="soft">Soft Diffused Light</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="angle">Camera Angle</label>
+                        <select name="angle" id="angle" class="control-select">
+                            <option value="45_degree_overhead">45° Overhead</option>
+                            <option value="straight_overhead">Straight Overhead</option>
+                            <option value="eye_level">Eye Level</option>
+                            <option value="slight_angle">Slight Angle</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="surface">Surface/Background</label>
+                        <select name="surface" id="surface" class="control-select">
+                            <option value="auto">Auto (Cuisine-Based)</option>
+                            <option value="wooden_table">Wooden Table</option>
+                            <option value="marble_surface">Marble Surface</option>
+                            <option value="ceramic_plate">White Ceramic</option>
+                            <option value="bamboo_mat">Bamboo Mat</option>
+                            <option value="dark_slate">Dark Slate</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="plating">Plating Style</label>
+                        <select name="plating" id="plating" class="control-select">
+                            <option value="authentic">Authentic (Sauce Drips)</option>
+                            <option value="clean">Clean & Precise</option>
+                            <option value="rustic">Rustic & Natural</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="color_temperature">Color Temperature</label>
+                        <select name="color_temperature" id="color_temperature" class="control-select">
+                            <option value="warm">Warm (Cozy)</option>
+                            <option value="neutral">Neutral (Balanced)</option>
+                            <option value="cool">Cool (Modern)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="garnish">Garnish Level</label>
+                        <select name="garnish" id="garnish" class="control-select">
+                            <option value="minimal">Minimal</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="elaborate">Elaborate</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group" style="margin-top: 20px;">
+                    <label class="control-label">
+                        <input type="checkbox" name="imperfections" class="control-checkbox" checked>
+                        Include realistic imperfections (more authentic look)
+                    </label>
+                </div>
+
+                <div class="control-group" style="margin-top: 15px;">
+                    <label class="control-label" for="quality">Image Quality</label>
+                    <select name="quality" id="quality" class="control-select">
+                        <option value="hd">HD Quality</option>
+                        <option value="standard">Standard Quality</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                🎨 Enhance with Custom Styling
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadText = document.getElementById('uploadText');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+
+        // Drag and drop functionality
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                showPreview(files[0]);
+            }
+        });
+
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                showPreview(e.target.files[0]);
+            }
+        });
+
+        function showPreview(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    uploadText.style.display = 'none';
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Form submission with loading state
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = '🧠 Processing with AI...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

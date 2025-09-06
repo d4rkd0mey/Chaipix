@@ -7,3 +7,5 @@ python-dotenv==1.0.0
 aiofiles==23.2.1
 python-multipart==0.0.6
 jinja2==3.1.2
+Pillow==10.0.1
+requests>=2.25.0,<3.0.0
